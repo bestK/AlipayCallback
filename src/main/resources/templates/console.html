@@ -1,0 +1,33 @@
+<html>
+<head>
+    <script src="https://cdn.bootcss.com/jquery/2.1.4/jquery.js"></script>
+    <script src="https://cdn.bootcss.com/sockjs-client/1.1.4/sockjs.min.js"></script>
+    <script src="https://cdn.bootcss.com/stomp.js/2.3.3/stomp.min.js"></script>
+
+    <script>
+        var stompClient = null;
+        $(function () {
+            openSocket();
+        });
+
+        function openSocket() {
+            if (stompClient === null) {
+                var socket = new SockJS("http://127.0.0.1:8080/push");
+                stompClient = Stomp.over(socket);
+                stompClient.connect({}, function (frame) {
+                    stompClient.subscribe('/paylog', function (event) {
+                        var content = JSON.parse(event.body);
+                        document.write("<p>" + event.body + "</p>")
+                    }, {});
+                });
+            }
+
+        }
+    </script>
+
+
+</head>
+<body>
+
+</body>
+</html>
